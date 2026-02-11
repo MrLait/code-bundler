@@ -1,51 +1,47 @@
 # CodeBundler (.NET)
 
-Утилита собирает исходники проекта в один `bundle.txt` (удобно для передачи в AI/LLM).
+Утилита собирает исходники проекта в один `bundle.txt`
 Сканирует указанную папку проекта, применяет фильтры (исключаемые папки/файлы/расширения) и сохраняет результат **в текущую папку запуска**.
 
 ## Требования
+
 - .NET SDK 9.0 (или совместимый)
 
 ## Запуск
 
 ### 1) Собрать и запустить в режиме разработки
+
 ```powershell
 dotnet run -- "D:\Path\To\Project"
+```
 
 ## Настройка фильтров
 
-### Исключаемые папки (`excludeDirs`):
+### Исключаемые папки (`EXCLUDE_DIRS`)
 
 ```csharp
-var excludeDirs = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-{
-    "bin", "obj", ".git", ".vs", "node_modules"
-};
+string[] EXCLUDE_DIRS = [];
+```
 
-### Исключаемые файлы по имени (excludeFileNames):
+### Исключаемые файлы по имени (EXCLUDE_FILE_NAMES)
 
 ```csharp
-var excludeFileNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-{
-    ".gitignore"
-};
+string[] EXCLUDE_FILE_NAMES = [];
+```
 
-### Исключаемые расширения (excludeFileExtensions):
+### Исключаемые расширения (EXCLUDE_FILE_EXTENSIONS)
 
-```csharp
-var excludeFileExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-{
-    ".code-workspace"
-};
-
-### Включаемые расширения (что попадёт в bundle.txt, includeExtensions):
+Расширения указываются вместе с точкой (например, .json).
 
 ```csharp
-var includeExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-{
-    ".cs", ".csproj", ".sln", ".json", ".yml", ".yaml", ".xml", ".md"
-};
+string[] EXCLUDE_FILE_EXTENSIONS = [];
+```
 
+## Формат bundle.txt
 
+В начале файла записывается служебная информация, затем каждый файл идёт блоком:
 
-
+```text
+FILE: relative\path\to\file.txt
+<file content>
+```
